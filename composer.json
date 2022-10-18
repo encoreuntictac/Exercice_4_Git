@@ -1,0 +1,19 @@
+{
+    "name": "app/demo",
+    "description": "Exercice 4 etendre une classe",
+    "type": "project",
+    "require": {
+        "fakerphp/faker": "^1.20"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\Demo\\": "App/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Parasmo",
+            "email": "parasmomarco@hotmail.com"
+        }
+    ]
+}
