@@ -9,26 +9,19 @@ namespace App\Demo\Entity;
 class Personne 
 {
     
-    private $id;
     private $nom;
     private $prenom;
     private $adresse;
     private $codepostal;
     private $pays;
-    private $societe;
 
-    public function __construct(string $nom,string $prenom,string  $adresse,int $codepostal,string  $pays,string  $societe)
+    public function __construct(string $nom ='',string $prenom ='',string  $adresse ='',int $codepostal = null,string  $pays ='')
     {
         $this->nom          = $nom;
         $this->prenom       = $prenom;
         $this->adresse      = $adresse;
         $this->codepostal   = $codepostal;
         $this->pays         = $pays;
-        $this->societe      = $societe;
-    }
-
-    public function getId(){
-        return $this->id;
     }
 
     public function getNom()
@@ -74,14 +67,5 @@ class Personne
     public function setPays($pays)
     {
         $this->pays = $pays;
-    }
-
-    public function getSociete()
-    {
-        return $this->societe;
-    }
-    public function setSociete($societe)
-    {
-        $this->societe = $societe;
     }
 }
