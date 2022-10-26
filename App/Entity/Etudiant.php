@@ -3,8 +3,11 @@ namespace App\Demo\Entity;
 
 class Etudiant extends Personne {
     
-    public function __construct()
+    protected $niveau;
+
+    public function __construct($niveau)
     {
-        
+        parent::__construct();
+        $this->niveau = $niveau;
     }
 }

@@ -43,19 +43,3 @@ class TableManager {
             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     }
 }
-
-/* $sql = <<<____SQL
-     CREATE TABLE IF NOT EXISTS `ticket_hist` (
-       `tid` int(11) NOT NULL,
-       `trqform` varchar(40) NOT NULL,
-       `trsform` varchar(40) NOT NULL,
-       `tgen` datetime NOT NULL,
-       `tterm` datetime,
-       `tstatus` tinyint(1) NOT NULL
-     ) ENGINE=ARCHIVE COMMENT='ticket archive';
-____SQL; */
-
-/* $sql = <<<____SQL
-DROP TABLE IF EXISTS ticket_hist
-____SQL;
-$result = $pdo->exec($sql); */

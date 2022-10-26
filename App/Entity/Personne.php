@@ -9,19 +9,19 @@ namespace App\Demo\Entity;
 class Personne 
 {
     
-    private $nom;
-    private $prenom;
-    private $adresse;
-    private $codepostal;
-    private $pays;
+    protected $nom;
+    protected $prenom;
+    protected $adresse;
+    protected $codepostal;
+    protected $status;
 
-    public function __construct(string $nom ='',string $prenom ='',string  $adresse ='',int $codepostal = null,string  $pays ='')
+    public function __construct(string $nom ='',string $prenom ='',string  $adresse ='',int $codepostal = null,string  $status = '')
     {
         $this->nom          = $nom;
         $this->prenom       = $prenom;
         $this->adresse      = $adresse;
         $this->codepostal   = $codepostal;
-        $this->pays         = $pays;
+        $this->status       = $status;
     }
 
     public function getNom()
@@ -60,12 +60,12 @@ class Personne
         $this->codepostal = $codepostal;
     }
 
-    public function getPays()
+    public function getStatus()
     {
-        return $this->pays;
+        return $this->status;
     }
-    public function setPays($pays)
+    public function setStatus($status)
     {
-        $this->pays = $pays;
+        $this->status = $status;
     }
 }
