@@ -2,7 +2,7 @@
 namespace app\Demo\Manager;
 
 use App\Demo\Manager\PersonneManager;
-
+use App\Demo\Entity\Personne;
 use PDO;
 
 class TableManager {

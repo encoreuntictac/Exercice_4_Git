@@ -7,33 +7,32 @@ use App\Demo\Entity\Personne;
 use App\Demo\Entity\Enseignant;
 use App\Demo\Entity\Etudiant;
 use App\Demo\Manager\TableManager;
+use App\Demo\Manager\PersonneManager;
 use App\Demo\Manager\CategorieManager;
 use App\Demo\Manager\EtudiantManager;
-use App\Demo\Manager\PersonneManager;
-
-
-/* Instanciation de la class PersonneManager */
+use App\Demo\Manager\CoursManager;
 
 $db = new TableManager('poo_php');
-$db = new CategorieManager('poo_php');
-var_dump($db->getPdo());
+
 
 $sql = <<<____SQL
 DROP TABLE IF EXISTS personne
 ____SQL;
-
 $db->getPdo()->exec($sql);
 
 $sql = <<<____SQL
 DROP TABLE IF EXISTS categorie
 ____SQL;
+$db->getPdo()->exec($sql);
 
+$sql = <<<____SQL
+DROP TABLE IF EXISTS etudiant
+____SQL;
 $db->getPdo()->exec($sql);
 
 $sql = <<<____SQL
 DROP TABLE IF EXISTS cours
 ____SQL;
-
 $db->getPdo()->exec($sql);
 
 $sql = <<<____SQL
@@ -43,9 +42,9 @@ $sql = <<<____SQL
         `prenom` varchar(255) DEFAULT NULL,
         `adresse` varchar(255) DEFAULT NULL,
         `codepostal` int NOT NULL,
-        `status` int NOT NULL,
+        `status` varchar(255) NOT NULL,
         PRIMARY KEY (`id`)
-    ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb3;
+    ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb3;
 ____SQL;
 
 $db->getPdo()->exec($sql);
@@ -60,31 +59,51 @@ ____SQL;
 
 $db->getPdo()->exec($sql);
 
+CategorieManager::addCateg('Enseignant');
+CategorieManager::addCateg('Etudiant');
+
+
+$sql = <<<____SQL
+    CREATE TABLE IF NOT EXISTS `etudiant` (
+        `id_etudiant` varchar(255) NOT NULL,
+        `niveau` varchar(255) NOT NULL,
+        `id` int NOT NULL,
+        `date` int NOT NULL,
+        PRIMARY KEY (`id_etudiant`)
+    ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb3;
+____SQL;
+
+$db->getPdo()->exec($sql);
+
 $sql = <<<____SQL
     CREATE TABLE IF NOT EXISTS `cours` (
         `id_cour` int NOT NULL AUTO_INCREMENT,
-        `titre` varchar(255) NOT NULL,
+        `titre_nom` varchar(255) NOT NULL,
         PRIMARY KEY (`id_cour`)
     ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb3;
 ____SQL;
 
-// $db->getPdo()->exec($sql);
+$db->getPdo()->exec($sql);
 
- 
-$db->addCateg('Enseignant');
-$db->addCateg('Etudiant');
+CoursManager::addCour('Math');
+CoursManager::addCour('Français');
+CoursManager::addCour('Anglais');
+CoursManager::addCour('Science');
+CoursManager::addCour('Economie');
 
-$db = new PersonneManager('poo_php');
-$db->addPersonne(Factory::create());
-$db->addPersonne(Factory::create());
+// var_dump($faker->dateTime());
+// var_dump(new DateTime(is_string(time())));
+
+
+$faker = Factory::create();
+
+$etudiant1 = new PersonneManager('poo_php');
+var_dump($etudiant1->addPersonne($faker, 'etudiant'));
+var_dump($etudiant1->test());
 
 
 
 
-// var_dump($faker->randomElement(['goku', 'vegeta']));
-
-$db = new Etudiant('poo_php');
-var_dump($db);
 
 $title = 'Exercice 4';
 require 'elements/header.php';
@@ -94,7 +113,7 @@ require 'elements/header.php';
 
 <div>
     <pre>
-        <?php var_dump($db->addEtudiant(Factory::create())) ?>
+
     </pre>
 </div>
 
