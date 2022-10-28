@@ -35,8 +35,8 @@ class TableManager {
         $req = $this->getPdo()->prepare('CREATE TABLE IF NOT EXISTS :tableName');
     }
 
-    static function getConnexion($tableName){
-
+    public static function getConnexion($tableName){
+        
         $mysql = 'mysql:host=localhost;dbname='.$tableName.'';
         return         
             $pdo = new PDO($mysql, 'root', '');

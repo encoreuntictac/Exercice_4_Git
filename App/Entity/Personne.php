@@ -8,20 +8,30 @@ namespace App\Demo\Entity;
  */
 class Personne 
 {
-    
+    protected $id;
     protected $nom;
     protected $prenom;
     protected $adresse;
     protected $codepostal;
     protected $status;
 
-    public function __construct(string $nom ='',string $prenom ='',string  $adresse ='',int $codepostal = null,string  $status = '')
+    public function __construct(int $id, string $nom ='',string $prenom ='',string  $adresse ='',int $codepostal = null,string  $status = '')
     {
+        $this->id           = $id;
         $this->nom          = $nom;
         $this->prenom       = $prenom;
         $this->adresse      = $adresse;
         $this->codepostal   = $codepostal;
         $this->status       = $status;
+    }
+
+    public function getId()
+    {
+        return $this->id;
+    }
+    public function setId($id)
+    {
+        $this->id = $id;
     }
 
     public function getNom()

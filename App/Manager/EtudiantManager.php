@@ -5,27 +5,55 @@ use Faker\Factory;
 use App\Demo\Entity\Personne;
 use App\Demo\Manager\TableManager;
 use App\Demo\Manager\PersonneManager;
-require_once '../Entity/Personne.php';
+
 use PDO;
 
 class EtudiantManager {
+    private $id;
 
     public function addEtudiant($personne,  $status)
     {
-        PersonneManager::addPersonne($personne,  $status);
-        $last_id = TableManager::getConnexion('poo_php')->lastInsertId();
-        $id_etudiant = 'Eleve_' . $last_id;
-        $time = time();
+        $db = new PersonneManager();
+        $db->addPersonne($personne,  $status);
+        $datas = $db->readPersonne(true);
 
-        $req = TableManager::getConnexion('poo_php')->prepare('INSERT INTO etudiant SET id_etudiant = :id_etudiant, niveau = :niveau, id = :id, date = :date');
-        
+        // var_dump($datas);
+        // $personne = new Personne($datas->id, $datas->nom, $datas->prenom, $datas->adresse, $datas->codepostal, $status);
+        // var_dump($personne);
+
+        $bd = new TableManager('poo_php');
+        $time = time();
+        $req = $bd->getPdo()->prepare('INSERT INTO etudiant SET nom = :nom, prenom = :prenom, niveau = :niveau, id = :id, date = :date');
+
         $req->execute([
-            'id_etudiant'   => $id_etudiant,
+            'nom'           => $datas->nom,
+            'prenom'        => $datas->prenom,
             'niveau'        => $personne->numberBetween(1, 3),
-            'id'            => $last_id,
+            'id'            => $datas->id,
             'date'          => $time
         ]);
 
+
+        $req = $bd->getPdo()->query('SELECT * FROM etudiant ORDER BY id_etudiant DESC limit 1');
+        $datas = $req->fetch(PDO::FETCH_OBJ);
+        $this->id = $datas->id_etudiant;
+        // var_dump($this->id);
+    }
+
+    public function addCour()
+    {
+        $bd = new TableManager('poo_php');
+        $req = $bd->getPdo()->prepare('INSERT INTO `cours suivis` SET nom = :nom, prenom = :prenom');
+
+        $req->execute([
+            'nom'           => $datas->nom,
+            'prenom'        => $datas->prenom
+        ]);
+    }
+
+    public function getId()
+    {
+        return $this->id;
     }
 }
 

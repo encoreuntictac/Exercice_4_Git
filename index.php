@@ -36,6 +36,11 @@ ____SQL;
 $db->getPdo()->exec($sql);
 
 $sql = <<<____SQL
+DROP TABLE IF EXISTS `cours suivis`
+____SQL;
+$db->getPdo()->exec($sql);
+
+$sql = <<<____SQL
     CREATE TABLE IF NOT EXISTS `personne` (
         `id` int NOT NULL AUTO_INCREMENT,
         `nom` varchar(255) DEFAULT NULL,
@@ -65,7 +70,9 @@ CategorieManager::addCateg('Etudiant');
 
 $sql = <<<____SQL
     CREATE TABLE IF NOT EXISTS `etudiant` (
-        `id_etudiant` varchar(255) NOT NULL,
+        `id_etudiant` int NOT NULL AUTO_INCREMENT,
+        `nom` varchar(255) DEFAULT NULL,
+        `prenom` varchar(255) DEFAULT NULL,
         `niveau` varchar(255) NOT NULL,
         `id` int NOT NULL,
         `date` int NOT NULL,
@@ -91,18 +98,30 @@ CoursManager::addCour('Anglais');
 CoursManager::addCour('Science');
 CoursManager::addCour('Economie');
 
+$sql = <<<____SQL
+    CREATE TABLE IF NOT EXISTS `cours suivis` (
+        `id_etudiant` int NOT NULL,
+        `id_cour` int NOT NULL
+      ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb3;
+____SQL;
+
+$db->getPdo()->exec($sql);
+
 // var_dump($faker->dateTime());
 // var_dump(new DateTime(is_string(time())));
 
+// $faker = Faker\Factory::create();
+// var_dump($faker->numberBetween(1, 3));
 
-$faker = Factory::create();
+$etudiant1 = new EtudiantManager();
+$etudiant1->addEtudiant(Factory::create(), 'etudiant');
 
-$etudiant1 = new PersonneManager('poo_php');
-var_dump($etudiant1->addPersonne($faker, 'etudiant'));
-var_dump($etudiant1->test());
+$Enseignant1 = new PersonneManager();
+$Enseignant1->addPersonne(Factory::create(), 'Enseignant');
 
-
-
+$etudiant2 = new EtudiantManager();
+$etudiant2->addEtudiant(Factory::create(), 'etudiant');
+var_dump($etudiant2->addCour());
 
 
 $title = 'Exercice 4';

@@ -22,16 +22,31 @@ class PersonneManager {
             'status'        => $status
         ]);
 
-        // $bd = new TableManager('poo_php');
-        // $req = $bd->getPdo()->query('SELECT * FROM personne');
-        // $resultat = $req->fetchAll(PDO::FETCH_CLASS, 'Personne');
-        // return $resultat;
     }
 
-    public function test() {
+    public function readPersonne($statement = false)
+    {
         $bd = new TableManager('poo_php');
-        $req = $bd->getPdo()->query('SELECT * FROM personne');
-        $resultat = $req->fetchAll(PDO::FETCH_OBJ);
-        return $resultat;
+
+        if (is_int($statement)) {
+
+            $req = $bd->getPdo()->prepare('SELECT * FROM personne WHERE id= :id');
+            $req->execute([
+                'id'           => $statement
+            ]);
+        } else {
+            $req = $bd->getPdo()->query('SELECT * FROM personne ORDER BY id DESC limit 1');
+        }
+
+
+        if ($statement) {
+
+            $datas = $req->fetch(PDO::FETCH_OBJ);
+        } else {
+
+            $datas = $req->fetchAll(PDO::FETCH_OBJ);
+        }
+
+        return $datas;
     }
 }
