@@ -9,6 +9,8 @@ use App\Demo\Manager\PersonneManager;
 use PDO;
 
 class EtudiantManager extends TableManager {
+    protected $id;
+    
     public function addEtudiant($datas)
     {
         $req = $this->getPdo()->prepare('INSERT INTO personne SET nom = :nom, prenom = :prenom, adresse = :adresse, codepostal = :codepostal, status = :status');
@@ -25,70 +27,30 @@ class EtudiantManager extends TableManager {
             'nom'           => $datas->getNom(),
             'prenom'        => $datas->getPrenom(),
             'niveau'        => $datas->getNiveau(),
-            'id'            =>  $this->getPdo()->lastInsertId(),
+            'id'            => $this->getPdo()->lastInsertId(),
             'date'          => date('Y-m-d H:i:s')
         ]);
+        
+        $this->id = $this->getPdo()->lastInsertId();
     }
 
-    public function addCour()
+    public function addCour($datas)
     {
-        $req = $this->getPdo()->prepare('INSERT INTO `cours suivis` SET id_etudiant = :id_etudiant, id_cour = :id_cour');
-        $req->execute([
-            'id_etudiant'    => $this->getPdo()->lastInsertId(),
-            'id_cour'        => 7,
-        ]);
+        foreach ($datas->getCour() as  &$value) {
+            $req = $this->getPdo()->prepare("SELECT id_cour FROM cours WHERE titre_nom= :titre_nom");
+            $req->execute([
+                'titre_nom' => $value
+            ]);
+            $datas = $req->fetch(PDO::FETCH_OBJ);
+
+            $req = $this->getPdo()->prepare('INSERT INTO `cours suivis` SET id_etudiant = :id_etudiant, id_cour = :id_cour');
+            $req->execute([
+                'id_etudiant'    => $this->id,
+                'id_cour'        => $datas->id_cour,
+            ]);
+        }
     }
 }
-
-/* class EtudiantManager {
-    private $id;
-
-    public function addEtudiant($personne,  $status)
-    {
-        $db = new PersonneManager();
-        $db->addPersonne($personne,  $status);
-        $datas = $db->readPersonne(true);
-
-        // var_dump($datas);
-        // $personne = new Personne($datas->id, $datas->nom, $datas->prenom, $datas->adresse, $datas->codepostal, $status);
-        // var_dump($personne);
-
-        $bd = new TableManager('poo_php');
-        $time = time();
-        $req = $bd->getPdo()->prepare('INSERT INTO etudiant SET nom = :nom, prenom = :prenom, niveau = :niveau, id = :id, date = :date');
-
-        $req->execute([
-            'nom'           => $datas->nom,
-            'prenom'        => $datas->prenom,
-            'niveau'        => $personne->numberBetween(1, 3),
-            'id'            => $datas->id,
-            'date'          => $time
-        ]);
-
-
-        $req = $bd->getPdo()->query('SELECT * FROM etudiant ORDER BY id_etudiant DESC limit 1');
-        $datas = $req->fetch(PDO::FETCH_OBJ);
-        $this->id = $datas->id_etudiant;
-        // var_dump($this->id);
-    }
-
-    public function addCour()
-    {
-        $bd = new TableManager('poo_php');
-        $req = $bd->getPdo()->prepare('INSERT INTO `cours suivis` SET nom = :nom, prenom = :prenom');
-
-        $req->execute([
-            'nom'           => $datas->nom,
-            'prenom'        => $datas->prenom
-        ]);
-    }
-
-    public function getId()
-    {
-        return $this->id;
-    }
-}
-
 
 // SELECT * 
 // FROM personne

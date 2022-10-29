@@ -13,122 +13,69 @@ use App\Demo\Manager\CategorieManager;
 use App\Demo\Manager\EtudiantManager;
 use App\Demo\Manager\CoursManager;
 
-$db = new TableManager('poo_php');
 
 
-$sql = <<<____SQL
-DROP TABLE IF EXISTS personne
-____SQL;
-$db->getPdo()->exec($sql);
+// Suprime les tables pour les renitialiser
+TableManager::deleteTable('personne');
+TableManager::deleteTable('categorie');
+TableManager::deleteTable('etudiant');
+TableManager::deleteTable('cours');
+TableManager::deleteTable("`cours suivis`");
 
-$sql = <<<____SQL
-DROP TABLE IF EXISTS categorie
-____SQL;
-$db->getPdo()->exec($sql);
 
-$sql = <<<____SQL
-DROP TABLE IF EXISTS etudiant
-____SQL;
-$db->getPdo()->exec($sql);
+// Créaction des tables
+TableManager::createTable('personne');
+TableManager::createTable('categorie');
+TableManager::createTable('etudiant');
+TableManager::createTable('cours');
+TableManager::createTable('cours suivis');
 
-$sql = <<<____SQL
-DROP TABLE IF EXISTS cours
-____SQL;
-$db->getPdo()->exec($sql);
 
-$sql = <<<____SQL
-DROP TABLE IF EXISTS `cours suivis`
-____SQL;
-$db->getPdo()->exec($sql);
-
-$sql = <<<____SQL
-    CREATE TABLE IF NOT EXISTS `personne` (
-        `id` int NOT NULL AUTO_INCREMENT,
-        `nom` varchar(255) DEFAULT NULL,
-        `prenom` varchar(255) DEFAULT NULL,
-        `adresse` varchar(255) DEFAULT NULL,
-        `codepostal` int NOT NULL,
-        `status` varchar(255) NOT NULL,
-        PRIMARY KEY (`id`)
-    ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb3;
-____SQL;
-
-$db->getPdo()->exec($sql);
-
-$sql = <<<____SQL
-    CREATE TABLE IF NOT EXISTS `categorie` (
-        `id_categ` int NOT NULL AUTO_INCREMENT,
-        `statut` varchar(255) NOT NULL,
-        PRIMARY KEY (`id_categ`)
-    ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb3;  
-____SQL;
-
-$db->getPdo()->exec($sql);
-
+// Déclaration de la bd categorie
 CategorieManager::addCateg('Enseignant');
 CategorieManager::addCateg('Etudiant');
 
 
-$sql = <<<____SQL
-    CREATE TABLE IF NOT EXISTS `etudiant` (
-        `id_etudiant` int NOT NULL AUTO_INCREMENT,
-        `nom` varchar(255) DEFAULT NULL,
-        `prenom` varchar(255) DEFAULT NULL,
-        `niveau` varchar(255) NOT NULL,
-        `id` int NOT NULL,
-        `date` datetime NOT NULL,
-        PRIMARY KEY (`id_etudiant`)
-    ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb3;
-____SQL;
-
-$db->getPdo()->exec($sql);
-
-$sql = <<<____SQL
-    CREATE TABLE IF NOT EXISTS `cours` (
-        `id_cour` int NOT NULL AUTO_INCREMENT,
-        `titre_nom` varchar(255) NOT NULL,
-        PRIMARY KEY (`id_cour`)
-    ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb3;
-____SQL;
-
-$db->getPdo()->exec($sql);
-
+// Déclaration de la bd cours
 CoursManager::addCour('Math');
 CoursManager::addCour('Français');
 CoursManager::addCour('Anglais');
 CoursManager::addCour('Science');
+CoursManager::addCour('Histoire');
+CoursManager::addCour('Géographie');
 CoursManager::addCour('Economie');
 
-$sql = <<<____SQL
-    CREATE TABLE IF NOT EXISTS `cours suivis` (
-        `id_etudiant` int NOT NULL,
-        `id_cour` int NOT NULL
-      ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb3;
-____SQL;
 
-$db->getPdo()->exec($sql);
-
-// var_dump($faker->dateTime());
-// var_dump(new DateTime(is_string(time())));
-
-// $faker = Faker\Factory::create();
-// var_dump($faker->numberBetween(1, 3));
-
-
-
-
-
+// Initialisation des Etudiants 
 $faker = Factory::create();
 
 $etudiant1 = new EtudiantManager('poo_php');
 $db = new Etudiant($faker);
 $etudiant1->addEtudiant($db);
-// $etudiant1->addCour();
+$etudiant1->addCour($db);
 
 $etudiant2 = new EtudiantManager('poo_php');
 $db = new Etudiant($faker);
 $etudiant2->addEtudiant($db);
-$etudiant2->addCour();
+$etudiant2->addCour($db);
+
+$etudiant3 = new EtudiantManager('poo_php');
+$db = new Etudiant($faker);
+$etudiant3->addEtudiant($db);
+$etudiant3->addCour($db);
+
+$etudiant4 = new EtudiantManager('poo_php');
+$db = new Etudiant($faker);
+$etudiant4->addEtudiant($db);
+$etudiant4->addCour($db);
+
+$etudiant5 = new EtudiantManager('poo_php');
+$db = new Etudiant($faker);
+$etudiant5->addEtudiant($db);
+$etudiant5->addCour($db);
+
+
+
 
 
 

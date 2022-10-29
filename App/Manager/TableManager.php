@@ -38,4 +38,80 @@ class TableManager {
             $pdo = new PDO($mysql, 'root', '');
             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     }
+
+    public static function deleteTable($tableName)
+    {
+        $db = new TableManager('poo_php');
+
+        $sql = <<<____SQL
+        DROP TABLE IF EXISTS $tableName
+        ____SQL;
+        $db->getPdo()->exec($sql);
+    }
+
+    public static function createTable($tableName)
+    {
+        $db = new TableManager('poo_php');
+
+        switch ($tableName) {
+            case 'personne' :
+                $sql = <<<____SQL
+                    CREATE TABLE IF NOT EXISTS `personne` (
+                        `id` int NOT NULL AUTO_INCREMENT,
+                        `nom` varchar(255) DEFAULT NULL,
+                        `prenom` varchar(255) DEFAULT NULL,
+                        `adresse` varchar(255) DEFAULT NULL,
+                        `codepostal` int NOT NULL,
+                        `status` varchar(255) NOT NULL,
+                        PRIMARY KEY (`id`)
+                    ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb3;
+            ____SQL;
+                break;
+            
+            case 'categorie' :
+                $sql = <<<____SQL
+                    CREATE TABLE IF NOT EXISTS `categorie` (
+                        `id_categ` int NOT NULL AUTO_INCREMENT,
+                        `statut` varchar(255) NOT NULL,
+                        PRIMARY KEY (`id_categ`)
+                    ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb3;  
+            ____SQL;
+                break;
+
+            case 'etudiant' :
+                $sql = <<<____SQL
+                    CREATE TABLE IF NOT EXISTS `etudiant` (
+                        `id_etudiant` int NOT NULL AUTO_INCREMENT,
+                        `nom` varchar(255) DEFAULT NULL,
+                        `prenom` varchar(255) DEFAULT NULL,
+                        `niveau` varchar(255) NOT NULL,
+                        `id` int NOT NULL,
+                        `date` datetime NOT NULL,
+                        PRIMARY KEY (`id_etudiant`)
+                    ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb3;
+            ____SQL;
+                break;
+
+            case 'cours' :
+                $sql = <<<____SQL
+                    CREATE TABLE IF NOT EXISTS `cours` ( 
+                        `id_cour` int NOT NULL AUTO_INCREMENT,
+                        `titre_nom` varchar(255) NOT NULL,
+                        PRIMARY KEY (`id_cour`)
+                    ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb3;
+            ____SQL;
+                break;
+
+            case 'cours suivis' :
+                $sql = <<<____SQL
+                    CREATE TABLE IF NOT EXISTS `cours suivis` (
+                        `id_etudiant` int NOT NULL,
+                        `id_cour` int NOT NULL
+                    ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb3;
+            ____SQL;
+                break;
+        }
+
+        $db->getPdo()->exec($sql);
+    }
 }

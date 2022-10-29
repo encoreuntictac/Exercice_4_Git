@@ -21,12 +21,12 @@ class Etudiant extends Personne {
     {
         $faker = Factory::create();
         return $faker->randomElement([
-            'première',
-            'deuxième',
-            'troisième',
-            'quatrième',
-            'cinquième',
-            'terminal'
+            "'première'",
+            "'deuxième'",
+            "'troisième'",
+            "'quatrième'",
+            "'cinquième'",
+            "'terminal'"
         ]);
     }
 
@@ -43,7 +43,8 @@ class Etudiant extends Personne {
                 'Anglais',
                 'Science',
                 'Histoire',
-                'géographie'
+                'Géographie',
+                'Economie'
             ]);
 
             !in_array($cour, $tabCour) ? array_push($tabCour, $cour): '';
