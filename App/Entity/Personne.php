@@ -1,6 +1,8 @@
 <?php
 namespace App\Demo\Entity;
 
+use Faker\Factory;
+
 /**
  * @author Parasmo Marco 
  * 
@@ -8,30 +10,23 @@ namespace App\Demo\Entity;
  */
 class Personne 
 {
-    protected $id;
     protected $nom;
     protected $prenom;
     protected $adresse;
     protected $codepostal;
-    protected $status;
 
-    public function __construct(int $id, string $nom ='',string $prenom ='',string  $adresse ='',int $codepostal = null,string  $status = '')
+    public function __construct(object $datas)
     {
-        $this->id           = $id;
-        $this->nom          = $nom;
-        $this->prenom       = $prenom;
-        $this->adresse      = $adresse;
-        $this->codepostal   = $codepostal;
-        $this->status       = $status;
+        $this->nom          = $datas->lastName();
+        $this->prenom       = $datas->firstName();
+        $this->adresse      = $datas->address();
+        $this->codepostal   = $datas->postcode();
     }
 
-    public function getId()
+    public static function newPersonne()
     {
-        return $this->id;
-    }
-    public function setId($id)
-    {
-        $this->id = $id;
+        $faker = Factory::create();
+        return new Personne($faker);
     }
 
     public function getNom()
@@ -68,14 +63,5 @@ class Personne
     public function setCodePostal($codepostal)
     {
         $this->codepostal = $codepostal;
-    }
-
-    public function getStatus()
-    {
-        return $this->status;
-    }
-    public function setStatus($status)
-    {
-        $this->status = $status;
     }
 }

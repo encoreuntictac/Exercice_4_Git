@@ -8,7 +8,39 @@ use App\Demo\Manager\PersonneManager;
 
 use PDO;
 
-class EtudiantManager {
+class EtudiantManager extends TableManager {
+    public function addEtudiant($datas)
+    {
+        $req = $this->getPdo()->prepare('INSERT INTO personne SET nom = :nom, prenom = :prenom, adresse = :adresse, codepostal = :codepostal, status = :status');
+        $req->execute([
+            'nom'           => $datas->getNom(),
+            'prenom'        => $datas->getPrenom(),
+            'adresse'       => $datas->getAdresse(),
+            'codepostal'    => $datas->getCodePostal(),
+            'status'        => 'Etudiant',
+        ]);
+
+        $req = $this->getPdo()->prepare('INSERT INTO etudiant SET nom = :nom, prenom = :prenom, niveau = :niveau, id = :id, date = :date');
+        $req->execute([
+            'nom'           => $datas->getNom(),
+            'prenom'        => $datas->getPrenom(),
+            'niveau'        => $datas->getNiveau(),
+            'id'            =>  $this->getPdo()->lastInsertId(),
+            'date'          => date('Y-m-d H:i:s')
+        ]);
+    }
+
+    public function addCour()
+    {
+        $req = $this->getPdo()->prepare('INSERT INTO `cours suivis` SET id_etudiant = :id_etudiant, id_cour = :id_cour');
+        $req->execute([
+            'id_etudiant'    => $this->getPdo()->lastInsertId(),
+            'id_cour'        => 7,
+        ]);
+    }
+}
+
+/* class EtudiantManager {
     private $id;
 
     public function addEtudiant($personne,  $status)
@@ -61,4 +93,4 @@ class EtudiantManager {
 // SELECT * 
 // FROM personne
 // INNER JOIN etudiant ON personne.id = etudiant.id_pers
-// INNER JOIN categorie ON personne.status = categorie.statut;
+// INNER JOIN categorie ON personne.status = categorie.statut; */

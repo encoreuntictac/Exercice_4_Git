@@ -7,6 +7,7 @@ use App\Demo\Entity\Personne;
 use App\Demo\Entity\Enseignant;
 use App\Demo\Entity\Etudiant;
 use App\Demo\Manager\TableManager;
+use App\Demo\Manager\TestManager;
 use App\Demo\Manager\PersonneManager;
 use App\Demo\Manager\CategorieManager;
 use App\Demo\Manager\EtudiantManager;
@@ -75,7 +76,7 @@ $sql = <<<____SQL
         `prenom` varchar(255) DEFAULT NULL,
         `niveau` varchar(255) NOT NULL,
         `id` int NOT NULL,
-        `date` int NOT NULL,
+        `date` datetime NOT NULL,
         PRIMARY KEY (`id_etudiant`)
     ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb3;
 ____SQL;
@@ -113,15 +114,23 @@ $db->getPdo()->exec($sql);
 // $faker = Faker\Factory::create();
 // var_dump($faker->numberBetween(1, 3));
 
-$etudiant1 = new EtudiantManager();
-$etudiant1->addEtudiant(Factory::create(), 'etudiant');
 
-$Enseignant1 = new PersonneManager();
-$Enseignant1->addPersonne(Factory::create(), 'Enseignant');
 
-$etudiant2 = new EtudiantManager();
-$etudiant2->addEtudiant(Factory::create(), 'etudiant');
-var_dump($etudiant2->addCour());
+
+
+$faker = Factory::create();
+
+$etudiant1 = new EtudiantManager('poo_php');
+$db = new Etudiant($faker);
+$etudiant1->addEtudiant($db);
+// $etudiant1->addCour();
+
+$etudiant2 = new EtudiantManager('poo_php');
+$db = new Etudiant($faker);
+$etudiant2->addEtudiant($db);
+$etudiant2->addCour();
+
+
 
 
 $title = 'Exercice 4';
