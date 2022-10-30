@@ -6,16 +6,25 @@ use Faker\Factory;
 
 class Etudiant extends Personne {
     
-    protected $niveau;
-    protected $cours = [];
-    // protected $date;
+    private $niveau;
+    private $cours = [];
+    private $datetime; 
+    
+    private static $etudiant;
 
     public function __construct(object $datas)
     {
         parent::__construct($datas);
+        $this->status = 'Etudiant';
         $this->niveau = self::getNiveau();
         $this->cours = self::getCour();
     } 
+
+    
+    public static function newEtudiant() {
+        self::$etudiant = new self(parent::newPersonne());
+        return self::$etudiant;
+    }
 
     public function getNiveau()
     {

@@ -3,6 +3,7 @@ require_once 'vendor/autoload.php';
 
 use App\Demo\Manager\TableManager;
 use Faker\Factory;
+use App\Demo\Manager\EntityManager;;
 
 use App\Demo\Manager\ConnexionManager;
 
@@ -73,10 +74,21 @@ TableManager::addCour(
 
 $faker = Factory::create();
 
-var_dump($faker->lastName());
-var_dump($faker->lastName());
-var_dump($faker->lastName());
-var_dump($faker->lastName());
+
+
+// EntityManager::createPersonne();
+
+// ! Extends est bon 
+// var_dump(Personne::newPersonne());
+// var_dump(Etudiant::newPersonne());
+// var_dump(Enseignant::newPersonne());
+
+
+
+var_dump(EntityManager::createEtudiant());
+var_dump(EntityManager::createEtudiant());
+var_dump('elev' . 1);
+
 $title = 'Exercice 4';
 require 'elements/header.php';
 ?>

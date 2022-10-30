@@ -1,13 +1,20 @@
 <?php
 namespace App\Demo\Manager;
 
-use Faker\Factory;
-use App\Demo\Manager\TableManager;
-use App\Demo\Entity\Personne;
-use PDO;
+// use Faker\Factory;
+// use App\Demo\Manager\TableManager;
+// use App\Demo\Entity\Personne;
+// use PDO;
 
 class PersonneManager {
 
+
+
+
+
+
+    
+/* 
     public function addPersonne($personne, $status)
     {
         $bd = new TableManager('poo_php');
@@ -49,4 +56,5 @@ class PersonneManager {
 
         return $datas;
     }
+     */
 }
