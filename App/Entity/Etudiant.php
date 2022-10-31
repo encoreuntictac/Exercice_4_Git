@@ -7,8 +7,8 @@ use Faker\Factory;
 class Etudiant extends Personne {
     
     private $niveau;
-    private $cours = [];
-    private $datetime; 
+    private $coursSuivis = [];
+    private $dateInscription; 
     
     private static $etudiant;
 
@@ -17,7 +17,7 @@ class Etudiant extends Personne {
         parent::__construct($datas);
         $this->status = 'Etudiant';
         $this->niveau = self::getNiveau();
-        $this->cours = self::getCour();
+        $this->coursSuivis = self::getCour();
     } 
 
     

@@ -11,7 +11,7 @@ class Personne
     private $adresse;
     private $codepostal;
     protected $status;
-
+    
 
     private static $personne;
 

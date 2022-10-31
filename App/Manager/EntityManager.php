@@ -2,7 +2,7 @@
 namespace App\Demo\Manager;
 
 use App\Demo\Manager\ConnexionManager;
-use App\Demo\Entity\Personne;
+use App\Demo\Entity\Enseignant;
 use App\Demo\Entity\Etudiant;
 
 use PDO;
@@ -33,6 +33,37 @@ class EntityManager
                 $i++;
             }
         }
+        if (array_key_exists('enseignant', $tab)) {
+            $i = 0;
+            while ($i < $tab['enseignant']) {
+                $datas = Enseignant::newEnseignant();
+
+                $id = self::$personne->addPersonne($datas);
+
+                $datas->setId(ConnexionManager::getDb()->lastInsertId());
+
+                self::$personne->addEnseignant($datas);
+          
+                // self::$personne->addCour($datas);
+                $i++;
+            }
+        }
+/*         if (array_key_exists('enseignant', $tab)) {
+            $i = 0;
+            while ($i < $tab['enseignant']) {
+                $datas = new Enseignant(Enseignant::newEnseignant());
+                var_dump($datas->getDebut()->format('Y/m/d H:i'));
+                var_dump($datas);
+                $id = self::$personne->addPersonne($datas);
+
+                $datas->setId(ConnexionManager::getDb()->lastInsertId());
+
+                self::$personne->addEnseignant($datas);
+          
+                // self::$personne->addCour($datas);
+                $i++;
+            }
+        } */
     }
 
     public function addPersonne($datas)
@@ -66,13 +97,26 @@ class EntityManager
             $sql->execute([
                 'titre_nom' => $value
             ]);
+            
             $data_id = $sql->fetch(PDO::FETCH_OBJ);
 
             $sql = ConnexionManager::getDb()->prepare('INSERT INTO `cours suivis` SET id_etudiant = :id_etudiant, id_cour = :id_cour');
             $sql->execute([
                 'id_etudiant'    => $datas->getId(),
-                'id_cour'        => $data_id->id_cour,
+                'id_cour'        => $data_id->id_cour
             ]);
         }
+    }
+
+    public function addEnseignant($datas)
+    {
+        $sql = ConnexionManager::getDb()->prepare('INSERT INTO enseignant SET nom = :nom, prenom = :prenom, anciennete = :anciennete, id = :id, date = :date');
+        $sql->execute([
+            'nom'           => $datas->getNom(),
+            'prenom'        => $datas->getPrenom(),
+            'anciennete'    => $datas->getAnciennete(),
+            'id'            => $datas->getId(),
+            'date'          => $datas->getDebut()->format('Y/m/d H:i')
+        ]);
     }
 }

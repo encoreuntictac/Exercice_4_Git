@@ -20,6 +20,7 @@ class TableManager {
     {
         ConnexionManager::getDb()->exec(self::deleteTable('personne'));
         ConnexionManager::getDb()->exec(self::deleteTable('categorie'));
+        ConnexionManager::getDb()->exec(self::deleteTable('enseignant'));
         ConnexionManager::getDb()->exec(self::deleteTable('etudiant'));
         ConnexionManager::getDb()->exec(self::deleteTable('cours'));
         ConnexionManager::getDb()->exec(self::deleteTable("`cours suivis`"));
@@ -53,6 +54,20 @@ class TableManager {
             ____SQL;
                 break;
 
+            case 'enseignant' :
+                $sql = <<<____SQL
+                    CREATE TABLE IF NOT EXISTS `enseignant` (
+                        `id_enseignant` int NOT NULL AUTO_INCREMENT,
+                        `nom` varchar(255) NOT NULL,
+                        `prenom` varchar(255) NOT NULL,
+                        `anciennete` int NOT NULL,
+                        `id` int NOT NULL,
+                        `date` datetime NOT NULL,
+                        PRIMARY KEY (`id_enseignant`)
+                    ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb3;
+            ____SQL;
+                break;
+    
             case 'etudiant' :
                 $sql = <<<____SQL
                     CREATE TABLE IF NOT EXISTS `etudiant` (
@@ -95,6 +110,7 @@ class TableManager {
     {
         ConnexionManager::getDb()->exec(self::createTable('personne'));
         ConnexionManager::getDb()->exec(self::createTable('categorie'));
+        ConnexionManager::getDb()->exec(self::createTable('enseignant'));
         ConnexionManager::getDb()->exec(self::createTable('etudiant'));
         ConnexionManager::getDb()->exec(self::createTable('cours'));
         ConnexionManager::getDb()->exec(self::createTable('cours suivis'));

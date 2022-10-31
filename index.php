@@ -5,7 +5,7 @@ use App\Demo\Manager\TableManager;
 use App\Demo\Manager\EntityManager;;
 
 use App\Demo\Manager\ConnexionManager;
-
+use Faker\Factory;
 
 use App\Demo\Entity\Personne;
 use App\Demo\Entity\Enseignant;
@@ -19,16 +19,16 @@ use App\Demo\Manager\EtudiantManager;
 // * Supprimer les tables pour les réinitialiser
 TableManager::deleteTableAll();
 
-//* Initialisation des tables
+// * Initialisation des tables
 TableManager::createTableAll();
 
-//* Déclaration de la DB catégorie
+// * Déclaration de la DB catégorie
 TableManager::addCateg(
     'Enseignant', 
     'Etudiant'
 );
 
-//* Déclaration de la DB cours
+// * Déclaration de la DB cours
 TableManager::addCour(
     'Math',
     'Français',
@@ -41,10 +41,13 @@ TableManager::addCour(
 
 
 EntityManager::addNewEtudiant([
-    'etudiant' => 2,
-    'enseignant' => 7
+    // 'etudiant' => 2,
+    'enseignant' => 5
 
 ]);
+
+
+
 
 
 $title = 'Exercice 4';
