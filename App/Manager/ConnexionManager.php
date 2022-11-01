@@ -38,7 +38,6 @@ class ConnexionManager {
         return $this->pdo;
     }
 
-
     public static function getDb() {
         if (self::$db === null) {
             self::$db = new self(self::DB_NAME, self::DB_USER, self::DB_PASS, self::DB_HOST);

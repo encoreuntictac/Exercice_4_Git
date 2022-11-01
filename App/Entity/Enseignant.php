@@ -4,7 +4,10 @@ namespace App\Demo\Entity;
 use DateTime;
 use Faker\Factory;
 
+
 class Enseignant extends Personne {
+    const NBR_COURS_D = 5;
+
     private $anciennete;
     private $coursDonnes = [];
     private $entreeEnService;
@@ -15,7 +18,7 @@ class Enseignant extends Personne {
     {
         parent::__construct($datas);
         $this->status = 'Enseignant';
-        $this->coursDonnes = self::getCour();
+        $this->coursDonnes = parent::getChoiceLesson(self::NBR_COURS_D);
         $this->entreeEnService = self::getEntreeEnService();
         $this->anciennete = self::getAnciennete();
     } 
@@ -30,10 +33,9 @@ class Enseignant extends Personne {
         $dateNow = new DateTime();
 
         $dateOld = $this->entreeEnService;
-        // var_dump($dateNow);
-        // var_dump($dateOld);
+
         $years = $dateNow->diff($dateOld);
-        // var_dump($years->y);
+
         return $years->y;
     }
 
@@ -41,8 +43,7 @@ class Enseignant extends Personne {
     {
         $faker = Factory::create();
         $faker = $faker->dateTime();
-        // var_dump($faker->format('Y/m/d H:i'));
-        // var_dump($faker);
+
         return $faker;
     }
 
@@ -51,27 +52,8 @@ class Enseignant extends Personne {
         return $this->entreeEnService;
     }
 
-    public function getCour()
+    public function getListLesson()
     {
-        $faker = Factory::create();
-        $tabCour = [];
-        $action = true;
-        
-        while($action) {
-            $cour = $faker->randomElement([
-                'Math',
-                'Français',
-                'Anglais',
-                'Science',
-                'Histoire',
-                'Géographie',
-                'Economie'
-            ]);
-
-            !in_array($cour, $tabCour) ? array_push($tabCour, $cour): '';
-
-            $action = count($tabCour) === 5 ? false : true;
-        }
-        return $tabCour;
+        return $this->coursDonnes;
     }
 }

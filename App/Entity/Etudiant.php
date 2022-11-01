@@ -1,11 +1,11 @@
 <?php 
 namespace App\Demo\Entity;
 
-use DateTime;
 use Faker\Factory;
 
 class Etudiant extends Personne {
-    
+    const NBR_COURS = 3;
+
     private $niveau;
     private $coursSuivis = [];
     private $dateInscription; 
@@ -16,8 +16,8 @@ class Etudiant extends Personne {
     {
         parent::__construct($datas);
         $this->status = 'Etudiant';
-        $this->niveau = self::getNiveau();
-        $this->coursSuivis = self::getCour();
+        $this->niveau = self::getLvl();
+        $this->coursSuivis = parent::getChoiceLesson(self::NBR_COURS);
     } 
 
     
@@ -26,40 +26,21 @@ class Etudiant extends Personne {
         return self::$etudiant;
     }
 
-    public function getNiveau()
+    public function getLvl()
     {
         $faker = Factory::create();
         return $faker->randomElement([
-            "'première'",
-            "'deuxième'",
-            "'troisième'",
-            "'quatrième'",
-            "'cinquième'",
-            "'terminal'"
+            "première",
+            "deuxième",
+            "troisième",
+            "quatrième",
+            "cinquième",
+            "terminal"
         ]);
     }
 
-    public function getCour()
+    public function getListLesson()
     {
-        $faker = Factory::create();
-        $tabCour = [];
-        $action = true;
-        
-        while($action) {
-            $cour = $faker->randomElement([
-                'Math',
-                'Français',
-                'Anglais',
-                'Science',
-                'Histoire',
-                'Géographie',
-                'Economie'
-            ]);
-
-            !in_array($cour, $tabCour) ? array_push($tabCour, $cour): '';
-
-            $action = count($tabCour) === 3 ? false : true;
-        }
-        return $tabCour;
+        return $this->coursSuivis;
     }
 }

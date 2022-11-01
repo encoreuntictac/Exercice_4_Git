@@ -11,62 +11,28 @@ class EntityManager
 {
     private static $personne;
 
-
-    public static function addNewEtudiant($tab)
+    public static function addNewPerson($tab)
     {
-        if (self::$personne === null) {
-            self::$personne = new self();
-        }
+        self::$personne = self::$personne ?? new self();
 
-        if (array_key_exists('etudiant', $tab)) {
+        foreach ($tab as $key => $val) {
             $i = 0;
-            while ($i < $tab['etudiant']) {
-                $datas = Etudiant::newEtudiant();
-    
-                $id = self::$personne->addPersonne($datas);
 
-                $datas->setId(ConnexionManager::getDb()->lastInsertId());
-
-                self::$personne->addEtudiant($datas);
+            while ($i < $val)
+            {
+                $datas = ($key === 'enseignant') ? Enseignant::newEnseignant(): Etudiant::newEtudiant();
+                $typeCour = ($datas->getStatus() === 'Enseignant') ? "`cours donnees`": "`cours suivis`";
                 
-                self::$personne->addCour($datas);
+                self::$personne->addPerson($datas);
+                
+                self::$personne->addLesson($typeCour, $datas);
+
                 $i++;
             }
         }
-        if (array_key_exists('enseignant', $tab)) {
-            $i = 0;
-            while ($i < $tab['enseignant']) {
-                $datas = Enseignant::newEnseignant();
-
-                $id = self::$personne->addPersonne($datas);
-
-                $datas->setId(ConnexionManager::getDb()->lastInsertId());
-
-                self::$personne->addEnseignant($datas);
-          
-                // self::$personne->addCour($datas);
-                $i++;
-            }
-        }
-/*         if (array_key_exists('enseignant', $tab)) {
-            $i = 0;
-            while ($i < $tab['enseignant']) {
-                $datas = new Enseignant(Enseignant::newEnseignant());
-                var_dump($datas->getDebut()->format('Y/m/d H:i'));
-                var_dump($datas);
-                $id = self::$personne->addPersonne($datas);
-
-                $datas->setId(ConnexionManager::getDb()->lastInsertId());
-
-                self::$personne->addEnseignant($datas);
-          
-                // self::$personne->addCour($datas);
-                $i++;
-            }
-        } */
     }
 
-    public function addPersonne($datas)
+    public function addPerson($datas)
     {
         $sql = ConnexionManager::getDb()->prepare('INSERT INTO personne SET nom = :nom, prenom = :prenom, adresse = :adresse, codepostal = :codepostal, status = :status');
         $sql->execute([
@@ -74,49 +40,43 @@ class EntityManager
             'prenom'        => $datas->getPrenom(),
             'adresse'       => $datas->getAdresse(),
             'codepostal'    => $datas->getCodePostal(),
-            'status'        => 'undefine'
+            'status'        => $datas->getStatus()
         ]);
-    }
 
-    public function addEtudiant($datas)
-    {
-        $sql = ConnexionManager::getDb()->prepare('INSERT INTO etudiant SET nom = :nom, prenom = :prenom, niveau = :niveau, id = :id, date = :date');
+        $datas->setId(ConnexionManager::getDb()->lastInsertId());
+        $champs = ($datas->getStatus() === 'Enseignant') ? 'anciennete': 'niveau';
+        $champsRslt = $champs === 'anciennete' ? $datas->getAnciennete()                    : $datas->getLvl();
+        $champsDate = $champs === 'anciennete' ? $datas->getDebut()->format('Y/m/d H:i')    : date('Y-m-d H:i:s');
+
+        $sql = ConnexionManager::getDb()->prepare("INSERT INTO {$datas->getStatus()} SET nom = :nom, prenom = :prenom,  {$champs} = :{$champs}, id = :id, date = :date");
         $sql->execute([
             'nom'           => $datas->getNom(),
             'prenom'        => $datas->getPrenom(),
-            'niveau'        => $datas->getNiveau(),
+            "{$champs}"     => $champsRslt,
             'id'            => $datas->getId(),
-            'date'          => date('Y-m-d H:i:s')
+            'date'          => $champsDate
         ]);
+        $datas->setId(ConnexionManager::getDb()->lastInsertId());
     }
 
-    public function addCour($datas)
+    public function addLesson($tableName, $datas)
     {
-        foreach ($datas->getCour() as  $value) {
-            $sql = ConnexionManager::getDb()->prepare("SELECT id_cour FROM cours WHERE titre_nom= :titre_nom");
+        $champs = ($tableName === "`cours donnees`") ? 'id_enseignant': 'id_etudiant';
+
+        foreach ($datas->getListLesson() as  $value) {
+            $sql = ConnexionManager::getDb()->prepare("SELECT id_cour FROM `cours listes` WHERE titre_nom= :titre_nom");
             $sql->execute([
                 'titre_nom' => $value
             ]);
             
             $data_id = $sql->fetch(PDO::FETCH_OBJ);
 
-            $sql = ConnexionManager::getDb()->prepare('INSERT INTO `cours suivis` SET id_etudiant = :id_etudiant, id_cour = :id_cour');
+            $sql = ConnexionManager::getDb()->prepare("INSERT INTO {$tableName} SET {$champs} = :{$champs}, id_cour = :id_cour ");
             $sql->execute([
-                'id_etudiant'    => $datas->getId(),
-                'id_cour'        => $data_id->id_cour
+                "{$champs}" => $datas->getId(),
+                'id_cour'   => $data_id->id_cour
             ]);
         }
     }
-
-    public function addEnseignant($datas)
-    {
-        $sql = ConnexionManager::getDb()->prepare('INSERT INTO enseignant SET nom = :nom, prenom = :prenom, anciennete = :anciennete, id = :id, date = :date');
-        $sql->execute([
-            'nom'           => $datas->getNom(),
-            'prenom'        => $datas->getPrenom(),
-            'anciennete'    => $datas->getAnciennete(),
-            'id'            => $datas->getId(),
-            'date'          => $datas->getDebut()->format('Y/m/d H:i')
-        ]);
-    }
 }
+

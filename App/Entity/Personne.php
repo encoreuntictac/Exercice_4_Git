@@ -11,10 +11,16 @@ class Personne
     private $adresse;
     private $codepostal;
     protected $status;
-    
 
     private static $personne;
-
+    
+    /**
+     * __construct
+     *
+     * @param  mixed $datas La possibilité d'utilise Faker ou instancier soit même les donnés
+     * 
+     * @return Nouvelle instance Personne 
+     */
     public function __construct(object $datas)
     {
         if (is_a($datas, 'App\Demo\Entity\Personne')) {
@@ -29,12 +35,49 @@ class Personne
             $this->codepostal   = $datas->postcode();
         }
     }
-
+    
+    /**
+     * newPersonne
+     *
+     * @return Object Personne 
+     */
     public static function newPersonne() {
         self::$personne = new self(Factory::create());
         return self::$personne;
     }
+        
+    /**
+     * Crée un array aléatoirement des cours donnés ou suivis  
+     *
+     * @param  mixed $nbr Decide la taille du tableau 
+     * 
+     * @return array 
+     * 
+     * @author Parasmo Marco 
+     */
+    public function getChoiceLesson($nbr) {
+        $faker = Factory::create();
+        $tabCour = [];
+        $action = true;
     
+        while($action) {
+            $cour = $faker->randomElement([
+                'Math',
+                'Français',
+                'Anglais',
+                'Science',
+                'Histoire',
+                'Géographie',
+                'Economie'
+            ]);
+
+            !in_array($cour, $tabCour) ? array_push($tabCour, $cour): '';
+
+            $action = count($tabCour) === $nbr ? false : true;
+        }
+        return $tabCour;
+    }
+
     public function getId()
     {
         return $this->id;
